@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface Admin</title>
+    <!-- Lien vers Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <header class="bg-primary text-white py-3">
+        <div class="container">
+            <h1 class="text-center">Interface Admin</h1>
+        </div>
+    </header>
+
+    <main class="container my-5">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Gestion des utilisateurs</h2>
+                        <p class="card-text">Gérez les utilisateurs enregistrés dans le système.</p>
+                        <a href="{% url 'admin_utilisateurs' %}" class="btn btn-primary">Voir et gérer les utilisateurs</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Gestion des catégories et des produits</h2>
+                        <p class="card-text">Ajoutez, modifiez ou supprimez des catégories et des produits.</p>
+                        <a href="{% url 'admin_categories' %}" class="btn btn-success">Gérer les catégories</a>
+                        <a href="{% url 'admin_produits' %}" class="btn btn-secondary">Gérer les produits</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white py-3">
+        <div class="container text-center">
+            <p>&copy; 2025 Votre Boutique</p>
+        </div>
+    </footer>
+
+    <!-- Lien vers Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
