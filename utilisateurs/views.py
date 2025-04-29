@@ -75,6 +75,7 @@ def accueil(request):
 def interface_clients(request):
     produits = Product.objects.all()  # Récupérer tous les produits
     return render(request, 'utilisateurs/interface_clients.html', {'produits': produits})
+    
 
 def interface_admin(request):
     return render(request, 'admin/interface_admin.html')

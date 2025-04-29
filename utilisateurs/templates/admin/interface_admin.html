@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,45 +7,112 @@
     <title>Interface Admin</title>
     <!-- Lien vers Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="{% static 'utilisateurs/img/favicon.ico' %}" type="image/x-icon">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #007bff;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff !important;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        footer {
+            background-color: #007bff;
+            color: #fff;
+        }
+        body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* La page doit occuper toute la hauteur de l'écran */
+        background-color: #f8f9fa;
+    }
+    main {
+        flex: 1; /* Le contenu principal prend tout l'espace disponible */
+    }
+    footer {
+        background-color: #007bff;
+        color: #fff;
+        text-align: center;
+        padding: 1rem 0;
+    }
+    </style>
 </head>
-<body class="bg-light">
-    <header class="bg-primary text-white py-3">
-        <div class="container">
-            <h1 class="text-center">Interface Admin</h1>
-        </div>
-    </header>
+<body>
 
-    <main class="container my-5">
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title">Gestion des utilisateurs</h2>
-                        <p class="card-text">Gérez les utilisateurs enregistrés dans le système.</p>
-                        <a href="{% url 'admin_utilisateurs' %}" class="btn btn-primary">Voir et gérer les utilisateurs</a>
-                    </div>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'interface_admin' %}">Admin Panel</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin_utilisateurs' %}">Utilisateurs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin_categories' %}">Catégories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin_produits' %}">Produits</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-danger ms-3" href="{% url 'connexion' %}">Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+<!-- Main Content -->
+<main class="container my-5">
+    <div class="row">
+        <!-- Gestion des utilisateurs -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Gestion des utilisateurs</h2>
+                    <p class="card-text">Gérez les utilisateurs enregistrés dans le système.</p>
+                    <a href="{% url 'admin_utilisateurs' %}" class="btn btn-primary">Voir et gérer les utilisateurs</a>
                 </div>
             </div>
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title">Gestion des catégories et des produits</h2>
-                        <p class="card-text">Ajoutez, modifiez ou supprimez des catégories et des produits.</p>
-                        <a href="{% url 'admin_categories' %}" class="btn btn-success">Gérer les catégories</a>
-                        <a href="{% url 'admin_produits' %}" class="btn btn-secondary">Gérer les produits</a>
-                    </div>
+        </div>
+
+        <!-- Gestion des catégories et des produits -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Gestion des catégories et des produits</h2>
+                    <p class="card-text">Ajoutez, modifiez ou supprimez des catégories et des produits.</p>
+                    <a href="{% url 'admin_categories' %}" class="btn btn-success">Gérer les catégories</a>
+                    <a href="{% url 'admin_produits' %}" class="btn btn-secondary">Gérer les produits</a>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
-    <footer class="bg-dark text-white py-3">
-        <div class="container text-center">
-            <p>&copy; 2025 Votre Boutique</p>
-        </div>
-    </footer>
+<!-- Footer -->
+<footer class="bg-dark text-white py-3">
+    <div class="container text-center">
+        <p>&copy; 2025 Votre Boutique. Tous droits réservés.</p>
+    </div>
+</footer>
 
-    <!-- Lien vers Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Lien vers Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -6,34 +6,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="{% static 'utilisateurs/img/favicon.ico' %}" type="image/x-icon">
+
     <style>
         body {
             background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
         }
         .navbar {
+            background-color: #007bff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff !important;
+        }
         .hero {
-            height: 80vh;
+            height: 100vh;
+            background: url("{% static 'utilisateurs/img/hero-bg.jpg' %}") no-repeat center center/cover;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
+            color: #000000;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
         }
         .hero h1 {
-            font-size: 3rem;
-            color: #007bff;
+            font-size: 4rem;
+            animation: fadeInDown 1.5s ease-in-out;
         }
         .hero p {
+            font-size: 1.5rem;
+            margin-top: 1rem;
+            animation: fadeInUp 2s ease-in-out;
+        }
+        .btn-primary, .btn-outline-primary {
             font-size: 1.2rem;
-            color: #555;
+            padding: 0.8rem 2rem;
+            margin-top: 1.5rem;
+        }
+        .features {
+            padding: 4rem 0;
+            background-color: #fff;
+        }
+        .features h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #007bff;
+        }
+        .features .feature {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .features .feature:hover {
+            transform: translateY(-10px);
+        }
+        .features .feature i {
+            font-size: 3rem;
+            color: #007bff;
+            margin-bottom: 1rem;
+        }
+        footer {
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white">
+<nav class="navbar navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand" href="{% url 'accueil' %}">🛍️ Shop</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -54,15 +120,50 @@
     <div>
         {% if request.session.utilisateur_id %}
             <h1>Bienvenue sur Shop ! 🎉</h1>
-            <p>Merci de bien vouloir vous connecté ou de vous inscrire afin de profitez de votre expérience.</p>
+            <p>Merci de bien vouloir vous connecter ou de vous inscrire afin de profiter de votre expérience.</p>
         {% else %}
             <h1>Bienvenue sur Shop ! 🛒</h1>
             <p>Inscrivez-vous ou connectez-vous pour profiter de nos services.</p>
         {% endif %}
-        <a href="{% url 'inscription' %}" class="btn btn-primary mt-3">S'inscrire</a>
-        <a href="{% url 'connexion' %}" class="btn btn-outline-primary mt-3">Se connecter</a>
+        <a href="{% url 'inscription' %}" class="btn btn-primary">S'inscrire</a>
+        <a href="{% url 'connexion' %}" class="btn btn-outline-primary">Se connecter</a>
     </div>
 </div>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <h2>Pourquoi choisir Shop ?</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature">
+                    <i class="bi bi-bag-check"></i>
+                    <h4>Produits de qualité</h4>
+                    <p>Nous offrons une large gamme de produits soigneusement sélectionnés pour répondre à vos besoins.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature">
+                    <i class="bi bi-cash-coin"></i>
+                    <h4>Prix compétitifs</h4>
+                    <p>Profitez des meilleures offres et promotions sur vos produits préférés.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature">
+                    <i class="bi bi-truck"></i>
+                    <h4>Livraison rapide</h4>
+                    <p>Recevez vos commandes rapidement grâce à notre service de livraison fiable.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 Shop. Tous droits réservés.</p>
+</footer>
 
 <!-- Scripts Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
