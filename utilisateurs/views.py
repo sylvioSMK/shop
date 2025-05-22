@@ -3,7 +3,12 @@ from django.contrib import messages
 from .models import User, Role
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
-from .models import User, Category, Product
+from .models import User, Category, Product, PayMethod, Sale, Bill
+from .utils import generate_sale_code  # Importez la fonction de génération de code
+from django.http import JsonResponse
+import random
+import string
+from django.contrib.auth.decorators import login_required
 
 def inscription(request):
     if request.method == "POST":
@@ -208,3 +213,143 @@ def supprimer_produit(request, prod_id):
     produit.delete()
     messages.success(request, "Produit supprimé avec succès.")
     return redirect('admin_produits')
+
+
+def panier(request):
+    panier = request.session.get('panier', {})
+    for produit_id, produit in panier.items():
+        produit['total'] = produit['prix'] * produit['quantite']  # Calcul du total pour chaque produit
+    return render(request, 'utilisateurs/panier.html', {'panier': panier})
+
+def ajouter_au_panier(request, produit_id):
+    panier = request.session.get('panier', {})
+    produit = Product.objects.get(id=produit_id)
+
+    if produit_id in panier:
+        panier[produit_id]['quantite'] += 1
+    else:
+        panier[produit_id] = {
+            'nom': produit.pro_name,
+            'prix': produit.pro_price,
+            'image': produit.pro_image.url if produit.pro_image else None,
+            'quantite': 1,
+        }
+
+    request.session['panier'] = panier
+    return redirect('panier')
+
+
+
+from django.http import JsonResponse
+
+def modifier_quantite(request, produit_id, delta):
+    panier = request.session.get('panier', {})
+    produit_id = str(produit_id)  # Convertir en chaîne car les clés de session sont des chaînes
+
+    if produit_id in panier:
+        panier[produit_id]['quantite'] += delta
+        if panier[produit_id]['quantite'] <= 0:
+            del panier[produit_id]  # Supprimer le produit si la quantité est <= 0
+        else:
+            panier[produit_id]['total'] = panier[produit_id]['quantite'] * panier[produit_id]['prix']
+    request.session['panier'] = panier
+
+    if produit_id in panier:
+        return JsonResponse({
+            'quantite': panier[produit_id]['quantite'],
+            'total': panier[produit_id]['quantite'] * panier[produit_id]['prix']
+        })
+    else:
+        return JsonResponse({'quantite': 0, 'total': 0})
+
+
+
+
+def supprimer_du_panier(request, produit_id):
+    panier = request.session.get('panier', {})
+    produit_id = str(produit_id)
+
+    if produit_id in panier:
+        del panier[produit_id]  # Supprimer le produit du panier
+
+    request.session['panier'] = panier
+    return JsonResponse({'success': True})
+
+
+def valider_panier(request):
+    panier = request.session.get('panier', {})
+    # Logique pour valider le panier (par exemple, sauvegarder dans la base de données)
+    messages.success(request, "Votre panier a été validé avec succès.")
+    return redirect('interface_clients')  # Redirige vers l'interface client après validation
+
+
+def mode_de_paiement(request):
+    # Récupérer les modes de paiement depuis la base de données
+    modes = PayMethod.objects.all()
+    return render(request, 'utilisateurs/mode_de_paiement.html', {'modes': modes})
+
+
+def generate_sale_code():
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+
+
+
+
+def choisir_mode_de_paiement(request, paymethod_id):
+    paymethod = get_object_or_404(PayMethod, id=paymethod_id)
+    user = request.user
+    sale_code = generate_sale_code()
+    sale = Sale.objects.create(
+        sale_code=sale_code,
+        user=user
+    )
+    panier = request.session.get('panier', {})
+    for produit_id, produit in panier.items():
+        product_instance = Product.objects.get(id=produit_id)
+        Bill.objects.create(
+            qty=produit['quantite'],
+            bill_code=sale_code,
+            prix_vente=produit['prix'],
+            total=produit['quantite'] * produit['prix'],
+            product=product_instance
+        )
+
+    # Sauvegarde AVANT de vider le panier
+    request.session['dernier_panier'] = panier
+    request.session['dernier_client_nom'] = user.lastname
+    request.session['dernier_client_prenom'] = user.firstname
+
+    request.session['panier'] = {}
+
+    return redirect('recu')
+
+def recu(request):
+    panier = request.session.get('dernier_panier', {})
+    client_nom = request.session.get('dernier_client_nom', 'Nom inconnu')
+    client_prenom = request.session.get('dernier_client_prenom', 'Prénom inconnu')
+
+    # Ajoute les print ici pour déboguer
+    print("PANIER:", panier)
+    print("NOM:", client_nom)
+    print("PRENOM:", client_prenom)
+
+    achats = []
+    total_general = 0
+    for produit_id, produit in panier.items():
+        total = produit['prix'] * produit['quantite']
+        achats.append({
+            'nom': produit['nom'],
+            'quantite': produit['quantite'],
+            'prix': produit['prix'],
+            'total': total,
+        })
+        total_general += total
+
+    context = {
+        'client_nom': client_nom,
+        'client_prenom': client_prenom,
+        'achats': achats,
+        'total_general': total_general,
+    }
+    return render(request, 'utilisateurs/recu.html', context)
+

@@ -74,14 +74,6 @@
         .product-card .card-text {
             color: #555;
         }
-        .product-card .btn {
-            background-color: #007bff;
-            color: #fff;
-            transition: background-color 0.3s ease;
-        }
-        .product-card .btn:hover {
-            background-color: #0056b3;
-        }
         footer {
             background-color: #000000;
             color: #fff;
@@ -158,7 +150,7 @@
                     <h5 class="card-title">{{ produit.pro_name }}</h5>
                     <p class="card-text">{{ produit.pro_desc|truncatewords:10 }}</p>
                     <p class="card-text text-primary fw-bold">{{ produit.pro_price }} FCFA</p>
-                    <button class="btn btn-primary">Ajouter au panier</button>
+                    <a href="{% url 'ajouter_au_panier' produit.id %}" class="btn btn-primary">Ajouter au panier</a>
                 </div>
             </div>
         </div>

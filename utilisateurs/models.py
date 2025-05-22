@@ -76,3 +76,6 @@ class Payment(models.Model):
     updated_up = models.DateTimeField(auto_now=True)
     paymethod = models.ForeignKey(PayMethod, on_delete=models.DO_NOTHING)
     sale = models.ForeignKey(Sale, on_delete=models.DO_NOTHING)
+
+
+

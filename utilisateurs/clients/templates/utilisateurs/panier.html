@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Panier</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="icon" href="{% static 'utilisateurs/img/favicon.ico' %}" type="image/x-icon">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'accueil' %}">🛍️ Shop</a>
+    </div>
+</nav>
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">Votre Panier</h2>
+    <div class="row">
+        {% for produit_id, produit in request.session.panier.items %}
+        <div class="col-md-12 mb-3" id="produit-{{ produit_id }}">
+            <div class="d-flex align-items-center border p-3">
+                <img src="{{ produit.image }}" alt="{{ produit.nom }}" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                <div class="ms-3">
+                    <h5>{{ produit.nom }}</h5>
+                    <p class="text-primary fw-bold">{{ produit.prix }} FCFA</p>
+                </div>
+                <div class="ms-auto d-flex align-items-center">
+                    <button class="btn btn-outline-secondary btn-sm me-2" onclick="modifierQuantite('{{ produit_id }}', -1)">-</button>
+                    <span id="quantite-{{ produit_id }}">{{ produit.quantite }}</span>
+                    <button class="btn btn-outline-secondary btn-sm ms-2" onclick="modifierQuantite('{{ produit_id }}', 1)">+</button>
+                </div>
+                <div class="ms-3">
+                    <p class="fw-bold" id="total-{{ produit_id }}">{{ produit.total }} FCFA</p>
+                </div>
+                <!-- Bouton Supprimer -->
+                <div class="ms-3">
+                    <button class="btn btn-danger btn-sm" onclick="supprimerProduit('{{ produit_id }}')">Supprimer</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+        <a href="{% url 'interface_clients' %}" class="btn btn-secondary">Retour à l'interface client</a>
+        <a href="{% url 'mode_de_paiement' %}" class="btn btn-success">Valider le panier</a>
+    </div>
+</div>
+
+<script>
+    function modifierQuantite(produitId, delta) {
+        $.ajax({
+            url: `/modifier_quantite/${produitId}/${delta}/`,
+            method: 'GET',
+            success: function(data) {
+                if (data.quantite > 0) {
+                    $(`#quantite-${produitId}`).text(data.quantite);
+                    $(`#total-${produitId}`).text(`${data.total} FCFA`);
+                } else {
+                    $(`#produit-${produitId}`).remove();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Erreur AJAX:', error);
+            }
+        });
+    }
+
+    function supprimerProduit(produitId) {
+        $.ajax({
+            url: `/supprimer_du_panier/${produitId}/`,
+            method: 'GET',
+            success: function(data) {
+                if (data.success) {
+                    $(`#produit-${produitId}`).remove();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Erreur AJAX:', error);
+            }
+        });
+    }
+</script>
+</body>
+</html>

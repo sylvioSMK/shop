@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mode de Paiement</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'accueil' %}">🛍️ Shop</a>
+    </div>
+</nav>
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">Choisissez votre mode de paiement</h2>
+    <div class="row g-4">
+       {% for mode in modes %}
+<div class="col-md-3">
+    <div class="payment-card text-center p-3 border rounded">
+        <img src="{% static 'utilisateurs/img/'|add:mode.pay_name|add:'.png' %}" alt="{{ mode.pay_name }}" style="width:80px; height:80px; object-fit:contain; margin-bottom:10px;">
+        <h5>{{ mode.pay_name }}</h5>
+        <p>Sélectionnez {{ mode.pay_name }} pour effectuer votre paiement.</p>
+        <a href="{% url 'recu' %}" class="btn btn-primary">Sélectionner</a>
+    </div>
+</div>
+{% endfor %}
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

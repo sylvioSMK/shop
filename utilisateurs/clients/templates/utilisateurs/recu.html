@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Reçu de commande</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container my-5" id="recu-content">
+    <div class="text-center mb-4">
+        <h2>🧾 Reçu de commande</h2>
+    </div>
+    <div class="mb-3">
+        <strong>Nom :</strong> {{ client_nom }}<br>
+        <strong>Prénom :</strong> {{ client_prenom }}<br>
+    </div>
+    <h5>Liste des achats :</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Prix unitaire</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in achats %}
+            <tr>
+                <td>{{ item.nom }}</td>
+                <td>{{ item.quantite }}</td>
+                <td>{{ item.prix }} FCFA</td>
+                <td>{{ item.total }} FCFA</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-end">
+        <strong>Total général :</strong> {{ total_general }} FCFA
+    </div>
+</div>
+</body>
+</html>

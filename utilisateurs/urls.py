@@ -22,5 +22,15 @@ urlpatterns = [
     path('admin_produits/ajouter/', views.ajouter_produit, name='ajouter_produit'),
     path('admin_produits/modifier/<int:prod_id>/', views.modifier_produit, name='modifier_produit'),
     path('admin_produits/supprimer/<int:prod_id>/', views.supprimer_produit, name='supprimer_produit'),
-    
+
+    path('panier/', views.panier, name='panier'),
+    path('ajouter_au_panier/<int:produit_id>/', views.ajouter_au_panier, name='ajouter_au_panier'),
+    path('modifier_quantite/<int:produit_id>/<int:delta>/', views.modifier_quantite, name='modifier_quantite'),
+    path('supprimer_du_panier/<int:produit_id>/', views.supprimer_du_panier, name='supprimer_du_panier'),
+    path('valider_panier/', views.valider_panier, name='valider_panier'),
+
+    path('mode_de_paiement/', views.mode_de_paiement, name='mode_de_paiement'),
+    path('choisir_mode_de_paiement/<int:paymethod_id>/', views.choisir_mode_de_paiement, name='choisir_mode_de_paiement'),
+
+   path('recu/', views.recu, name='recu'),
 ]
